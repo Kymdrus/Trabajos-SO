@@ -86,13 +86,19 @@ echo ""
 for directorio in "${directorios[@]}"; 
 do
 
+    if [ ! -d "$directorio" ]; then
+        echo "Este directorio está mal, no existe : ${directorio}"
+        echo "Terminando el programa"
+        exit
+    fi
+
     archivos=("${directorio}"/*)
 
     for archivo in "${archivos[@]}"; 
     do
         echo "$(basename "$archivo")  bytes: $(stat -c%s "$archivo")   $(realpath "$archivo")"
     done
-done
+done | sort
 
 
 
