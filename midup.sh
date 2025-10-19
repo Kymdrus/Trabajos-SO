@@ -39,28 +39,32 @@ fi
     local Anterior=""
     local RutaAnterior=""
     tamanoanterior=0
-    
+    #Recorrer los arrays usando archivos nombres como referencia y asignando i como contador
     for i in "${!archivosnombre[@]}"; do
-        local actual="${archivosnombre[$i]}"
+        local actual="${archivosnombre[$i]}" 
         local Ruta="${archivosruta[$i]}"
         local Tamano="${archivostamano[$i]}"
+        #caso si -l es igual a 1
         if [ "$argumentol" -eq 1 ]; then
-           if [ "$actual" = "$Anterior" ]; then
+           #compara los elementos del array
+           if [ "$actual" = "$Anterior" ] && [ "$Tamano" -gt "$argumentos" ]; then
               echo "Se ha encontrado un duplicado: $actual"
               echo "  Archivo 1: $Anterior, Ruta: $RutaAnterior"
               echo "  Archivo 2: $actual, Ruta: $Ruta"
            fi
-        fi
-        elif [ "$argumentol" -eq 2 ] ; then
+        
+        elif [ "$argumentol" -eq 2 ]; then
             if [ "$actual" = "$Anterior" ] && [ "$Tamano" -eq "$tamanoanterior" ] && [ "$Tamano" -gt "$argumentos" ]; then
               echo "Se ha encontrado un duplicado: $actual"
               echo "  Archivo 1: $Anterior, Ruta: $RutaAnterior, Tamaño: $tamanoanterior bytes"
               echo "  Archivo 2: $actual, Ruta: $Ruta, Tamaño: $Tamano bytes"
 
            fi
-        fi
+        
         else
           echo "Solo se admiten valores entre 1 y 2"
+        fi
+        #Actualizar valores
         Anterior="$actual"
         RutaAnterior="$Ruta"
         tamanoanterior="$Tamano"
