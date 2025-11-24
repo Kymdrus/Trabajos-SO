@@ -3,6 +3,7 @@
 #include <stdlib.h>     
 #include <dirent.h>     // opendir y readdir
 #include <sys/stat.h>   // lstat y struct stat
+#include <ctype.h> //Para el "isDigit"
 
 struct Archivo { //Para el array donde los ordeno, filtro, etc...
     char nombre[256];      
@@ -92,6 +93,15 @@ int main(int argc, char *argv[]){
                 exit(0);
             }
             
+            for (char *p = argv[contador+1]; *p ; p++)
+            {   //Si le paso un valor raro, explota.
+                if (!isdigit(*p)) {
+                    fprintf(stderr, "Error: valor no numérico\n");
+                    exit(1);
+                }
+            }
+            
+            
             profundidad = atoi(argv[contador+1]);
             contador+=2;
             continue;
@@ -107,6 +117,16 @@ int main(int argc, char *argv[]){
                 exit(0);
             }
             
+            //Compruebo si es un número. Si es 1 u 2 lo hago luego.
+            
+            for (char *p = argv[contador+1]; *p ; p++)
+            {   //Si le paso un valor raro, explota.
+                if (!isdigit(*p)) {
+                    fprintf(stderr, "Error: valor no numérico\n");
+                    exit(1);
+                }
+            }
+
             precision = atoi(argv[contador+1]);
             contador+=2;
             continue;
@@ -120,6 +140,15 @@ int main(int argc, char *argv[]){
             {
                 printf("El argumento %s espera un valor.\nSaliendo...\n", argumentoActual);
                 exit(0);
+            }
+
+             //Compruebo si estoy pasandole un número           
+            for (char *p = argv[contador+1]; *p ; p++)
+            {   //Si le paso un valor raro, explota.
+                if (!isdigit(*p)) {
+                    fprintf(stderr, "Error: valor no numérico\n");
+                    exit(1);
+                }
             }
             
             bytes = atoi(argv[contador+1]);
@@ -159,6 +188,12 @@ int main(int argc, char *argv[]){
         directorios[0] = "."; // Cadena literal válida
         directoriosAlmacenadosParaAnalizar = 1;
     }
+    if (!(precision == 1 || precision == 2))
+    {
+        printf("La precision tiene que ser o 1 o 2.");
+        exit(0);
+    }
+    
 
    //Itera por todos los directorios almacenados
     for (int k = 0; k < directoriosAlmacenadosParaAnalizar; k++) {
