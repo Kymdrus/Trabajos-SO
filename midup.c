@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
     int precision=1;
     int bytes=0;
     int numdir=0;
-    for(int i=0;i<argc;i++){
+    for(int i=1;i<argc;i++){
        if (strcmp(argv[i], "-l") == 0 && i + 1 < argc) {
           precision = atoi(argv[i + 1]);
           i++;  
@@ -68,27 +68,27 @@ int main(int argc, char *argv[]){
           bytes = atoi(argv[i + 1]);
           i++;  
 
-       } 
-       
        
     }
-    for (int i=0;i<argc;i++){
-         if(strcmp(argv[i], "-l")==0 || strcmp(argv[i], "-p")==0 || strcmp(argv[i], "-s")==0){
+       
+    }
+    for (int i=1;i<argc;i++){
+         if(strcmp(argv[i], "-l")==0 || strcmp(argv[i], "-p")==0 || strcmp(argv[i], "-s")==0 ){
             i++; 
-         continue;
+           continue;
         }
+    
         if(numdir<MAX_CARPETAS){
             directorios[numdir++]= argv[i];
         }
-    }
+       
+    }    
     if(numdir==0){
-        directorios[numdir++]="./";
+       directorios[numdir++]=".";
     }
     for(int i=0;i<numdir;i++){
         leercarpeta(directorios[i], 0);
     }
-    
-
     for(int i=0;i<guardados;i++){
     
         Registro aux = arrayRegistros[i];
