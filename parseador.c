@@ -1,6 +1,6 @@
 #include <stdio.h>      // printf
 #include <string.h>     // strcopy
-#include <stdlib.h>     // no me acuerdo
+#include <stdlib.h>     
 #include <dirent.h>     // opendir y readdir
 #include <sys/stat.h>   // lstat y struct stat
 
@@ -34,7 +34,7 @@ void analizarArchivos(char *ruta_actual, int profundidad) {
         snprintf(ruta_completa, 4096, "%s/%s", ruta_actual, entrada->d_name);
 
         // guardar todos los datos de "ruta completa" a "datos_archivo"
-        lstat(ruta_completa, &datos_archivo); 
+        stat(ruta_completa, &datos_archivo); 
 
         // Si es directorio.....->
         if (S_ISDIR(datos_archivo.st_mode)) {
@@ -70,10 +70,11 @@ int main(int argc, char *argv[]){
 
 
 
-    int profundidad = 0;
+    int profundidad = -1;
     int precision = 0;
     int bytes = 0;
-    char directorio[4096] = "";
+    char *directorios[10]; //10 "Strings"
+    int directoriosAlmacenadosParaAnalizar = 0;
 
     int contador = 1;
 
@@ -128,11 +129,13 @@ int main(int argc, char *argv[]){
 
         // Tomar el directorio
         // El directorio no va por argumento, sino que simplemente aparece, así que las validaciones son distintas
-        // Si el usuario pone más de un directorio, simplemente se sobreescribe
         else
         {
-            //stringcopy -> copia lo de argv a directorio
-            strcpy(directorio, argv[contador]);
+            
+            if (directoriosAlmacenadosParaAnalizar < 10) {
+                directorios[directoriosAlmacenadosParaAnalizar] = argv[contador];
+                directoriosAlmacenadosParaAnalizar++;
+            }
             if ((contador+1) == (argc)){break;}
             contador++;
             continue;
@@ -143,18 +146,27 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
-
-    printf("Profundidad : %d\nPrecision : %d\nBytes : %d\nDirectorio : %s\n", profundidad, precision, bytes, directorio);
+    if (profundidad == -1)
+    {
+        profundidad = 100; //Prácticamente infinito.
+    }
+    
+    printf("Profundidad : %d\nPrecision : %d\nBytes : %d\nCantidad directorios: %d\n", profundidad, precision, bytes, directoriosAlmacenadosParaAnalizar);
 
 
     //Compruebo si se especificó un directorio
-    if (!strcmp(directorio, ""))
-    {
-        strcpy(directorio, ".");
+    if (directoriosAlmacenadosParaAnalizar == 0) {
+        directorios[0] = "."; // Cadena literal válida
+        directoriosAlmacenadosParaAnalizar = 1;
     }
 
-    //Funcion que toma todos los directorios y los guardará en un array gigante que ya cree previamente
-    analizarArchivos(directorio, profundidad);
+   //Itera por todos los directorios almacenados
+    for (int k = 0; k < directoriosAlmacenadosParaAnalizar; k++) {
+         //Funcion que toma todos los directorios y los guardará en un array gigante que ya cree previamente
+        analizarArchivos(directorios[k], profundidad);
+    }
+    
+
 
     ///------------------------------------------------///
     ///                      SORT!!!!!!                ///
