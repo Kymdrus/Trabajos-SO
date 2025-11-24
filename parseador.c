@@ -198,6 +198,9 @@ int main(int argc, char *argv[]){
    //Itera por todos los directorios almacenados
     for (int k = 0; k < directoriosAlmacenadosParaAnalizar; k++) {
          //Funcion que toma todos los directorios y los guardará en un array gigante que ya cree previamente
+        DIR *f = opendir(directorios[k]);
+        if (f == NULL){printf("El directorio %s no existe. Saltando al siguiente...\n", directorios[k]); continue;}
+        
         analizarArchivos(directorios[k], profundidad);
     }
     
