@@ -5,14 +5,14 @@
 #include <signal.h>
 int main(){
     srand(getpid());
-    int r= rand()%5+1;
-    sleep(r);
-    if(rand()%2){
+    sleep(10);
+    printf("Fin Hijo con el pid%d\n",getpid());
+   /* if(rand()%2){
        printf("No lanzo nada ,soy el hijo con el Pid %d \n", getpid()); 
     }else{
        printf("Lanzando SIGUSR1 con el pid%d\n", getpid());
         kill(getppid(),SIGUSR1);
     }
-
+    */
     return 0;
 }
