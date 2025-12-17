@@ -3,16 +3,9 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <signal.h>
-int main(){
-    srand(getpid());
+int main(int argc,char *argv[]){
     sleep(10);
-    printf("Fin Hijo con el pid%d\n",getpid());
-   /* if(rand()%2){
-       printf("No lanzo nada ,soy el hijo con el Pid %d \n", getpid()); 
-    }else{
-       printf("Lanzando SIGUSR1 con el pid%d\n", getpid());
-        kill(getppid(),SIGUSR1);
-    }
-    */
+    execlp("wc", "wc", argv[1], (char*)NULL);
+   printf("Fin Hijo con el pid%d\n",getpid());
     return 0;
 }
